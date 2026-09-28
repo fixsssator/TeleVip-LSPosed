@@ -40,7 +40,14 @@ jobs:
       - name: Rename APK
         run: |
           mkdir -p artifacts
-          cp app/build/outputs/apk/release/app-release.apk "artifacts/TeleVip-${GITHUB_SHA::7}.apk"
+          APK=$(find app/build/outputs/apk/release -maxdepth 1 -type f -name '*.apk' | head -n 1)
+          if [ -z "$APK" ]; then
+            echo "No APK found:"
+            find app/build/outputs/apk/release -maxdepth 2 -type f -print
+            exit 1
+          fi
+          echo "Found APK: $APK"
+          cp "$APK" "artifacts/TeleVip-${GITHUB_SHA::7}.apk"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
