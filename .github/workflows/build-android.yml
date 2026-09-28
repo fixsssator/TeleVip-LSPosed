@@ -34,13 +34,13 @@ jobs:
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
-      - name: Build release APK
-        run: ./gradlew :app:assembleRelease --stacktrace
+      - name: Build debug APK
+        run: ./gradlew assembleDebug --stacktrace
 
       - name: Rename APK
         run: |
           mkdir -p artifacts
-          APK=$(find app/build/outputs/apk/release -maxdepth 1 -type f -name '*.apk' | head -n 1)
+          APK=$(find app/build/outputs/apk/debug -maxdepth 1 -type f -name '*.apk' | head -n 1)
           if [ -z "$APK" ]; then
             echo "No APK found:"
             find app/build/outputs/apk/release -maxdepth 2 -type f -print
