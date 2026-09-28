@@ -44,7 +44,7 @@ tasks.register("copyLargestDexAsJava") {
     dependsOn(":settingsadapter:assembleDebug")
 
     doLast {
-        def apkFile = fileTree("$rootDir/settingsadapter/build/intermediates/apk/debug")
+        def apkFile = fileTree("$rootDir/settingsadapter/build/outputs/apk/debug")
                 .matching { include "*.apk" }
                 .singleFile
 
