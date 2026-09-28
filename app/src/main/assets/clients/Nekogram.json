@@ -1,0 +1,1313 @@
+{
+  "classes": [
+    {
+      "o": "androidx.collection.LongSparseArray",
+      "r": "mj9"
+    },
+    {
+      "o": "org.telegram.messenger.AndroidUtilities",
+      "r": "org.telegram.messenger.b"
+    },
+    {
+      "o": "org.telegram.messenger.ApplicationLoader",
+      "r": "org.telegram.messenger.d"
+    },
+    {
+      "o": "org.telegram.messenger.DispatchQueue",
+      "r": "jl5"
+    },
+    {
+      "o": "org.telegram.messenger.FileLoadOperation",
+      "r": "org.telegram.messenger.u"
+    },
+    {
+      "o": "org.telegram.messenger.FileLoader",
+      "r": "org.telegram.messenger.v"
+    },
+    {
+      "o": "org.telegram.messenger.LocaleController",
+      "r": "org.telegram.messenger.h0"
+    },
+    {
+      "o": "org.telegram.messenger.MessageObject",
+      "r": "org.telegram.messenger.l0"
+    },
+    {
+      "o": "org.telegram.messenger.MessagesController",
+      "r": "org.telegram.messenger.n0"
+    },
+    {
+      "o": "org.telegram.messenger.MessagesStorage",
+      "r": "org.telegram.messenger.o0"
+    },
+    {
+      "o": "org.telegram.messenger.NotificationCenter",
+      "r": "org.telegram.messenger.p0"
+    },
+    {
+      "o": "org.telegram.messenger.NotificationsController",
+      "r": "org.telegram.messenger.q0"
+    },
+    {
+      "o": "org.telegram.messenger.SharedConfig",
+      "r": "org.telegram.messenger.y0"
+    },
+    {
+      "o": "org.telegram.messenger.UserConfig",
+      "r": "org.telegram.messenger.f1"
+    },
+    {
+      "o": "org.telegram.messenger.browser.Browser",
+      "r": "s71"
+    },
+    {
+      "o": "org.telegram.messenger.time.FastDateFormat",
+      "r": "rd6"
+    },
+    {
+      "o": "org.telegram.tgnet.QuickAckDelegate",
+      "r": "c6e"
+    },
+    {
+      "o": "org.telegram.tgnet.RequestDelegateTimestamp",
+      "r": "org.telegram.tgnet.a"
+    },
+    {
+      "o": "org.telegram.tgnet.TLObject",
+      "r": "org.telegram.tgnet.d"
+    },
+    {
+      "o": "org.telegram.tgnet.TLRPC$Chat",
+      "r": "org.telegram.tgnet.TLRPC$p"
+    },
+    {
+      "o": "org.telegram.tgnet.TLRPC$EncryptedChat",
+      "r": "org.telegram.tgnet.TLRPC$q0"
+    },
+    {
+      "o": "org.telegram.tgnet.TLRPC$InputPeer",
+      "r": "org.telegram.tgnet.TLRPC$u1"
+    },
+    {
+      "o": "org.telegram.tgnet.TLRPC$Message",
+      "r": "org.telegram.tgnet.TLRPC$m2"
+    },
+    {
+      "o": "org.telegram.tgnet.TLRPC$Peer",
+      "r": "org.telegram.tgnet.TLRPC$e3"
+    },
+    {
+      "o": "org.telegram.tgnet.TLRPC$TL_channels_readHistory",
+      "r": "org.telegram.tgnet.TLRPC$qf"
+    },
+    {
+      "o": "org.telegram.tgnet.TLRPC$TL_channels_readMessageContents",
+      "r": "org.telegram.tgnet.TLRPC$rf"
+    },
+    {
+      "o": "org.telegram.tgnet.TLRPC$TL_inputPeerChannel",
+      "r": "org.telegram.tgnet.TLRPC$ly"
+    },
+    {
+      "o": "org.telegram.tgnet.TLRPC$TL_messages_affectedMessages",
+      "r": "org.telegram.tgnet.TLRPC$se0"
+    },
+    {
+      "o": "org.telegram.tgnet.TLRPC$TL_messages_readDiscussion",
+      "r": "org.telegram.tgnet.TLRPC$fm0"
+    },
+    {
+      "o": "org.telegram.tgnet.TLRPC$TL_messages_readEncryptedHistory",
+      "r": "org.telegram.tgnet.TLRPC$gm0"
+    },
+    {
+      "o": "org.telegram.tgnet.TLRPC$TL_messages_readHistory",
+      "r": "org.telegram.tgnet.TLRPC$im0"
+    },
+    {
+      "o": "org.telegram.tgnet.TLRPC$TL_messages_readMessageContents",
+      "r": "org.telegram.tgnet.TLRPC$km0"
+    },
+    {
+      "o": "org.telegram.tgnet.TLRPC$TL_messages_sendMedia",
+      "r": "org.telegram.tgnet.TLRPC$jo0"
+    },
+    {
+      "o": "org.telegram.tgnet.TLRPC$TL_messages_sendMessage",
+      "r": "org.telegram.tgnet.TLRPC$ko0"
+    },
+    {
+      "o": "org.telegram.tgnet.TLRPC$TL_messages_sendMultiMedia",
+      "r": "org.telegram.tgnet.TLRPC$lo0"
+    },
+    {
+      "o": "org.telegram.tgnet.TLRPC$TL_messages_sendPaidReaction",
+      "r": "org.telegram.tgnet.TLRPC$mo0"
+    },
+    {
+      "o": "org.telegram.tgnet.TLRPC$TL_messages_sendReaction",
+      "r": "org.telegram.tgnet.TLRPC$oo0"
+    },
+    {
+      "o": "org.telegram.tgnet.TLRPC$TL_messages_setEncryptedTyping",
+      "r": "org.telegram.tgnet.TLRPC$zo0"
+    },
+    {
+      "o": "org.telegram.tgnet.TLRPC$TL_messages_setTyping",
+      "r": "org.telegram.tgnet.TLRPC$bp0"
+    },
+    {
+      "o": "org.telegram.tgnet.TLRPC$User",
+      "r": "org.telegram.tgnet.TLRPC$n91"
+    },
+    {
+      "o": "org.telegram.tgnet.TLRPC$messages_Messages",
+      "r": "org.telegram.tgnet.TLRPC$hb1"
+    },
+    {
+      "o": "org.telegram.tgnet.WriteToSocketDelegate",
+      "r": "wvl"
+    },
+    {
+      "o": "org.telegram.tgnet.tl.TL_account$updateStatus",
+      "r": "tbi"
+    },
+    {
+      "o": "org.telegram.tgnet.tl.TL_stories$TL_stories_incrementStoryViews",
+      "r": "l0j"
+    },
+    {
+      "o": "org.telegram.tgnet.tl.TL_stories$TL_stories_readStories",
+      "r": "n0j"
+    },
+    {
+      "o": "org.telegram.tgnet.tl.TL_update$TL_updateDeleteChannelMessages",
+      "r": "d3j"
+    },
+    {
+      "o": "org.telegram.tgnet.tl.TL_update$TL_updateDeleteMessages",
+      "r": "g3j"
+    },
+    {
+      "o": "org.telegram.ui.ActionBar.ActionBar",
+      "r": "org.telegram.ui.ActionBar.a"
+    },
+    {
+      "o": "org.telegram.ui.ActionBar.ActionBar$ActionBarMenuOnItemClick",
+      "r": "org.telegram.ui.ActionBar.a$m"
+    },
+    {
+      "o": "org.telegram.ui.ActionBar.ActionBarMenuItem",
+      "r": "org.telegram.ui.ActionBar.d"
+    },
+    {
+      "o": "org.telegram.ui.ActionBar.AlertDialog$OnButtonClickListener",
+      "r": "org.telegram.ui.ActionBar.AlertDialog$l"
+    },
+    {
+      "o": "org.telegram.ui.ActionBar.Theme",
+      "r": "org.telegram.ui.ActionBar.r"
+    },
+    {
+      "o": "org.telegram.ui.Cells.ChatMessageCell",
+      "r": "cm3"
+    },
+    {
+      "o": "org.telegram.ui.Cells.HeaderCell",
+      "r": "fq7"
+    },
+    {
+      "o": "org.telegram.ui.Cells.ShadowSectionCell",
+      "r": "zyf"
+    },
+    {
+      "o": "org.telegram.ui.Cells.TextCheckCell",
+      "r": "pbj"
+    },
+    {
+      "o": "org.telegram.ui.Cells.TextSettingsCell",
+      "r": "rdj"
+    },
+    {
+      "o": "org.telegram.ui.Components.UItem",
+      "r": "org.telegram.ui.Components.a5"
+    },
+    {
+      "o": "org.telegram.ui.Components.UniversalAdapter",
+      "r": "org.telegram.ui.Components.i5"
+    },
+    {
+      "o": "org.telegram.ui.PhotoViewer$PhotoViewerProvider",
+      "r": "org.telegram.ui.PhotoViewer$y2"
+    },
+    {
+      "o": "org.telegram.ui.PhotoViewer$PlaceProviderObject",
+      "r": "org.telegram.ui.PhotoViewer$z2"
+    },
+    {
+      "o": "org.telegram.ui.SettingsActivity$SettingCell",
+      "r": "org.telegram.ui.SettingsActivity$k"
+    },
+    {
+      "o": "org.telegram.ui.SettingsActivity$SettingCell$Factory",
+      "r": "org.telegram.ui.SettingsActivity$k$b"
+    },
+    {
+      "o": "org.telegram.ui.Stories.PeerStoriesView$StoryItemHolder",
+      "r": "org.telegram.ui.Stories.PeerStoriesView$q0"
+    },
+    {
+      "o": "org.telegram.ui.Stories.StoriesController",
+      "r": "org.telegram.ui.Stories.g"
+    }
+  ],
+  "fields": [
+    {
+      "c": "ApplicationLoader",
+      "o": "applicationContext",
+      "r": "b"
+    },
+    {
+      "c": "FileLoadOperation",
+      "o": "downloadChunkSizeBig",
+      "r": "o"
+    },
+    {
+      "c": "FileLoadOperation",
+      "o": "maxCdnParts",
+      "r": "q"
+    },
+    {
+      "c": "FileLoadOperation",
+      "o": "maxDownloadRequests",
+      "r": "n"
+    },
+    {
+      "c": "FileLoadOperation",
+      "o": "maxDownloadRequestsBig",
+      "r": "l"
+    },
+    {
+      "c": "LocaleController",
+      "o": "currentLocale",
+      "r": "y"
+    },
+    {
+      "c": "LocaleController",
+      "o": "isRTL",
+      "r": "S"
+    },
+    {
+      "c": "MessagesController",
+      "o": "dialogMessage",
+      "r": "R"
+    },
+    {
+      "c": "MessagesController",
+      "o": "dialogMessagesByIds",
+      "r": "U"
+    },
+    {
+      "c": "NotificationCenter",
+      "o": "messagesDeleted",
+      "r": "z"
+    },
+    {
+      "c": "NotificationCenter",
+      "o": "tlSchemeParseException",
+      "r": "s"
+    },
+    {
+      "c": "UserConfig",
+      "o": "clientUserId",
+      "r": "p"
+    },
+    {
+      "c": "UserConfig",
+      "o": "selectedAccount",
+      "r": "r0"
+    },
+    {
+      "c": "Utilities",
+      "o": "stageQueue",
+      "r": "d"
+    },
+    {
+      "c": "TLRPC$InputPeer",
+      "o": "channel_id",
+      "r": "d"
+    },
+    {
+      "c": "TLRPC$InputPeer",
+      "o": "chat_id",
+      "r": "e"
+    },
+    {
+      "c": "TLRPC$InputPeer",
+      "o": "user_id",
+      "r": "c"
+    },
+    {
+      "c": "TLRPC$Message",
+      "o": "flags",
+      "r": "k"
+    },
+    {
+      "c": "TLRPC$Message",
+      "o": "from_id",
+      "r": "b"
+    },
+    {
+      "c": "TLRPC$Message",
+      "o": "id",
+      "r": "a"
+    },
+    {
+      "c": "TLRPC$Message",
+      "o": "message",
+      "r": "i"
+    },
+    {
+      "c": "TLRPC$Message",
+      "o": "ttl",
+      "r": "m0"
+    },
+    {
+      "c": "TLRPC$Peer",
+      "o": "channel_id",
+      "r": "c"
+    },
+    {
+      "c": "TLRPC$Peer",
+      "o": "chat_id",
+      "r": "b"
+    },
+    {
+      "c": "TLRPC$Peer",
+      "o": "user_id",
+      "r": "a"
+    },
+    {
+      "c": "TLRPC$TL_channels_readHistory",
+      "o": "channel",
+      "r": "a"
+    },
+    {
+      "c": "TLRPC$TL_channels_readHistory",
+      "o": "max_id",
+      "r": "b"
+    },
+    {
+      "c": "TLRPC$TL_messages_affectedMessages",
+      "o": "pts",
+      "r": "a"
+    },
+    {
+      "c": "TLRPC$TL_messages_affectedMessages",
+      "o": "pts_count",
+      "r": "b"
+    },
+    {
+      "c": "TLRPC$TL_messages_readDiscussion",
+      "o": "peer",
+      "r": "a"
+    },
+    {
+      "c": "TLRPC$TL_messages_readHistory",
+      "o": "max_id",
+      "r": "b"
+    },
+    {
+      "c": "TLRPC$TL_messages_readHistory",
+      "o": "peer",
+      "r": "a"
+    },
+    {
+      "c": "TLRPC$TL_messages_sendMedia",
+      "o": "peer",
+      "r": "r"
+    },
+    {
+      "c": "TLRPC$TL_messages_sendMessage",
+      "o": "peer",
+      "r": "v"
+    },
+    {
+      "c": "TLRPC$TL_messages_sendMultiMedia",
+      "o": "peer",
+      "r": "h"
+    },
+    {
+      "c": "TLRPC$TL_messages_sendPaidReaction",
+      "o": "peer",
+      "r": "c"
+    },
+    {
+      "c": "TLRPC$TL_messages_sendReaction",
+      "o": "peer",
+      "r": "d"
+    },
+    {
+      "c": "TLRPC$User",
+      "o": "phone",
+      "r": "f"
+    },
+    {
+      "c": "TLRPC$messages_Messages",
+      "o": "messages",
+      "r": "a"
+    },
+    {
+      "c": "TL_account$updateStatus",
+      "o": "offline",
+      "r": "a"
+    },
+    {
+      "c": "TL_update$TL_updateDeleteChannelMessages",
+      "o": "channel_id",
+      "r": "a"
+    },
+    {
+      "c": "TL_update$TL_updateDeleteChannelMessages",
+      "o": "messages",
+      "r": "b"
+    },
+    {
+      "c": "TL_update$TL_updateDeleteMessages",
+      "o": "messages",
+      "r": "a"
+    },
+    {
+      "c": "Theme",
+      "o": "chat_timePaint",
+      "r": "X2"
+    }
+  ],
+  "methods": [
+    {
+      "c": "LongSparseArray",
+      "o": "getJ",
+      "r": "h"
+    },
+    {
+      "c": "LongSparseArray",
+      "o": "getJO",
+      "r": "i"
+    },
+    {
+      "c": "SQLiteCursor",
+      "o": "byteBufferValue",
+      "r": "b"
+    },
+    {
+      "c": "SQLiteCursor",
+      "o": "dispose",
+      "r": "d"
+    },
+    {
+      "c": "SQLiteCursor",
+      "o": "intValue",
+      "r": "g"
+    },
+    {
+      "c": "SQLiteCursor",
+      "o": "longValue",
+      "r": "i"
+    },
+    {
+      "c": "SQLiteCursor",
+      "o": "next",
+      "r": "j"
+    },
+    {
+      "c": "SQLiteDatabase",
+      "o": "executeFast",
+      "r": "e"
+    },
+    {
+      "c": "SQLiteDatabase",
+      "o": "queryFinalized",
+      "r": "h"
+    },
+    {
+      "c": "SQLitePreparedStatement",
+      "o": "bindByteBufferIB",
+      "r": "b"
+    },
+    {
+      "c": "SQLitePreparedStatement",
+      "o": "bindByteBufferIO",
+      "r": "a"
+    },
+    {
+      "c": "SQLitePreparedStatement",
+      "o": "bindByteBufferJIBI",
+      "r": "bindByteBuffer"
+    },
+    {
+      "c": "SQLitePreparedStatement",
+      "o": "bindInteger",
+      "r": "c"
+    },
+    {
+      "c": "SQLitePreparedStatement",
+      "o": "bindLongIJ",
+      "r": "d"
+    },
+    {
+      "c": "SQLitePreparedStatement",
+      "o": "bindLongJIJ",
+      "r": "bindLong"
+    },
+    {
+      "c": "SQLitePreparedStatement",
+      "o": "dispose",
+      "r": "i"
+    },
+    {
+      "c": "SQLitePreparedStatement",
+      "o": "requery",
+      "r": "m"
+    },
+    {
+      "c": "SQLitePreparedStatement",
+      "o": "step",
+      "r": "n"
+    },
+    {
+      "c": "SQLitePreparedStatement",
+      "o": "stepJ",
+      "r": "step"
+    },
+    {
+      "c": "AndroidUtilities",
+      "o": "isTabletInternal",
+      "r": "E3"
+    },
+    {
+      "c": "DispatchQueue",
+      "o": "postRunnableR",
+      "r": "k"
+    },
+    {
+      "c": "DispatchQueue",
+      "o": "postRunnableRJ",
+      "r": "l"
+    },
+    {
+      "c": "FileLoadOperation",
+      "o": "updateParams",
+      "r": "b1"
+    },
+    {
+      "c": "FileLoader",
+      "o": "getInstance",
+      "r": "K0"
+    },
+    {
+      "c": "FileLoader",
+      "o": "getPathToMessageO",
+      "r": "U0"
+    },
+    {
+      "c": "FileLoader",
+      "o": "getPathToMessageOZ",
+      "r": "V0"
+    },
+    {
+      "c": "FileLoader",
+      "o": "getPathToMessageOZZ",
+      "r": "W0"
+    },
+    {
+      "c": "ImageReceiver",
+      "o": "getImageLocation",
+      "r": "K"
+    },
+    {
+      "c": "LocaleController",
+      "o": "formatShortNumber",
+      "r": "F0"
+    },
+    {
+      "c": "LocaleController",
+      "o": "formatYearMont",
+      "r": "Y0"
+    },
+    {
+      "c": "LocaleController",
+      "o": "getInstance",
+      "r": "E1"
+    },
+    {
+      "c": "MessageObject",
+      "o": "canForwardMessage",
+      "r": "O"
+    },
+    {
+      "c": "MessageObject",
+      "o": "getDialogId",
+      "r": "l1"
+    },
+    {
+      "c": "MessageObject",
+      "o": "getDialogIdO",
+      "r": "m1"
+    },
+    {
+      "c": "MessageObject",
+      "o": "isMusic",
+      "r": "I5"
+    },
+    {
+      "c": "MessageObject",
+      "o": "isSecret",
+      "r": "C4"
+    },
+    {
+      "c": "MessageObject",
+      "o": "isVoice",
+      "r": "d7"
+    },
+    {
+      "c": "MessagesController",
+      "o": "checkPromoInfoInternal",
+      "r": "Q9"
+    },
+    {
+      "c": "MessagesController",
+      "o": "deleteMessagesAAOJIZI",
+      "r": "ra"
+    },
+    {
+      "c": "MessagesController",
+      "o": "deleteMessagesAAOJIZIZ",
+      "r": "sa"
+    },
+    {
+      "c": "MessagesController",
+      "o": "deleteMessagesAAOJZIZJOI",
+      "r": "ta"
+    },
+    {
+      "c": "MessagesController",
+      "o": "deleteMessagesAAOJZIZJOIZI",
+      "r": "ua"
+    },
+    {
+      "c": "MessagesController",
+      "o": "getGlobalMainSettings",
+      "r": "Yb"
+    },
+    {
+      "c": "MessagesController",
+      "o": "getInputChannelJ",
+      "r": "cc"
+    },
+    {
+      "c": "MessagesController",
+      "o": "getInputChannelO",
+      "r": "dc"
+    },
+    {
+      "c": "MessagesController",
+      "o": "getInputChannelO2",
+      "r": "ec"
+    },
+    {
+      "c": "MessagesController",
+      "o": "getInstance",
+      "r": "pc"
+    },
+    {
+      "c": "MessagesController",
+      "o": "isChatNoForwardsJ",
+      "r": "Id"
+    },
+    {
+      "c": "MessagesController",
+      "o": "isChatNoForwardsO",
+      "r": "Jd"
+    },
+    {
+      "c": "MessagesController",
+      "o": "processNewDifferenceParams",
+      "r": "so"
+    },
+    {
+      "c": "MessagesController",
+      "o": "processUpdateArray",
+      "r": "to"
+    },
+    {
+      "c": "MessagesController",
+      "o": "removePromoDialog",
+      "r": "bp"
+    },
+    {
+      "c": "MessagesController",
+      "o": "storiesEnabled",
+      "r": "iq"
+    },
+    {
+      "c": "MessagesController",
+      "o": "storyEntitiesAllowed",
+      "r": "jq"
+    },
+    {
+      "c": "MessagesController",
+      "o": "storyEntitiesAllowedO",
+      "r": "kq"
+    },
+    {
+      "c": "MessagesStorage",
+      "o": "getDatabase",
+      "r": "z5"
+    },
+    {
+      "c": "MessagesStorage",
+      "o": "getInstance",
+      "r": "P5"
+    },
+    {
+      "c": "MessagesStorage",
+      "o": "getStorageQueue",
+      "r": "i6"
+    },
+    {
+      "c": "MessagesStorage",
+      "o": "markMessagesAsDeletedJAZZII",
+      "r": "Sb"
+    },
+    {
+      "c": "MessagesStorage",
+      "o": "markMessagesAsDeletedJIZZ",
+      "r": "Rb"
+    },
+    {
+      "c": "MessagesStorage",
+      "o": "putMessagesAZZZIIJ",
+      "r": "vc"
+    },
+    {
+      "c": "MessagesStorage",
+      "o": "putMessagesAZZZIZIJ",
+      "r": "wc"
+    },
+    {
+      "c": "MessagesStorage",
+      "o": "putMessagesInternal",
+      "r": "yc"
+    },
+    {
+      "c": "MessagesStorage",
+      "o": "putMessagesOJIIZIJ",
+      "r": "xc"
+    },
+    {
+      "c": "NotificationCenter",
+      "o": "postNotificationName",
+      "r": "C"
+    },
+    {
+      "c": "NotificationsController",
+      "o": "removeDeletedMessagesFromNotifications",
+      "r": "Y1"
+    },
+    {
+      "c": "SharedConfig",
+      "o": "isAppUpdateAvailable",
+      "r": "N"
+    },
+    {
+      "c": "SharedConfig",
+      "o": "setNewAppVersionAvailable",
+      "r": "q0"
+    },
+    {
+      "c": "UserConfig",
+      "o": "getClientUserId",
+      "r": "n"
+    },
+    {
+      "c": "UserConfig",
+      "o": "getCurrentUser",
+      "r": "o"
+    },
+    {
+      "c": "UserConfig",
+      "o": "isPremium",
+      "r": "C"
+    },
+    {
+      "c": "Browser",
+      "o": "openUrlCS",
+      "r": "H"
+    },
+    {
+      "c": "Browser",
+      "o": "openUrlCSZ",
+      "r": "I"
+    },
+    {
+      "c": "Browser",
+      "o": "openUrlCSZZ",
+      "r": "J"
+    },
+    {
+      "c": "Browser",
+      "o": "openUrlCU",
+      "r": "C"
+    },
+    {
+      "c": "Browser",
+      "o": "openUrlCUZ",
+      "r": "D"
+    },
+    {
+      "c": "Browser",
+      "o": "openUrlCUZZ",
+      "r": "E"
+    },
+    {
+      "c": "Browser",
+      "o": "openUrlCUZZO",
+      "r": "F"
+    },
+    {
+      "c": "Browser",
+      "o": "openUrlCUZZZOSZZZ",
+      "r": "G"
+    },
+    {
+      "c": "FastDateFormat",
+      "o": "formatD",
+      "r": "c"
+    },
+    {
+      "c": "FastDateFormat",
+      "o": "formatJ",
+      "r": "a"
+    },
+    {
+      "c": "FastDateFormat",
+      "o": "formatOSF",
+      "r": "format"
+    },
+    {
+      "c": "TLRPC$Message",
+      "o": "TLdeserialize",
+      "r": "c"
+    },
+    {
+      "c": "TLRPC$Message",
+      "o": "readAttachPath",
+      "r": "e"
+    },
+    {
+      "c": "ActionBar",
+      "o": "setActionBarMenuOnItemClick",
+      "r": "F0"
+    },
+    {
+      "c": "ActionBarMenuItem",
+      "o": "addSubItemIC",
+      "r": "b0"
+    },
+    {
+      "c": "ActionBarMenuItem",
+      "o": "addSubItemIIC",
+      "r": "e0"
+    },
+    {
+      "c": "ActionBarMenuItem",
+      "o": "addSubItemIICO",
+      "r": "f0"
+    },
+    {
+      "c": "ActionBarMenuItem",
+      "o": "addSubItemIICZ",
+      "r": "g0"
+    },
+    {
+      "c": "ActionBarMenuItem",
+      "o": "addSubItemIIDCZZ",
+      "r": "c0"
+    },
+    {
+      "c": "ActionBarMenuItem",
+      "o": "addSubItemIIDCZZO",
+      "r": "d0"
+    },
+    {
+      "c": "ActionBarMenuItem",
+      "o": "addSubItemIV",
+      "r": "a0"
+    },
+    {
+      "c": "ActionBarMenuItem",
+      "o": "addSubItemIVII",
+      "r": "i0"
+    },
+    {
+      "c": "ActionBarMenuItem",
+      "o": "addSubItemVII",
+      "r": "j0"
+    },
+    {
+      "c": "ActionBarMenuItem",
+      "o": "lazilyAddSubItemIDC",
+      "r": "h1"
+    },
+    {
+      "c": "ActionBarMenuItem",
+      "o": "lazilyAddSubItemIIC",
+      "r": "g1"
+    },
+    {
+      "c": "ActionBarMenuItem",
+      "o": "lazilyAddSubItemIIDCZZ",
+      "r": "f1"
+    },
+    {
+      "c": "AlertDialog$Builder",
+      "o": "create",
+      "r": "c"
+    },
+    {
+      "c": "AlertDialog$Builder",
+      "o": "getDismissRunnable",
+      "r": "f"
+    },
+    {
+      "c": "AlertDialog$Builder",
+      "o": "setMessage",
+      "r": "t"
+    },
+    {
+      "c": "AlertDialog$Builder",
+      "o": "setNegativeButton",
+      "r": "v"
+    },
+    {
+      "c": "AlertDialog$Builder",
+      "o": "setNeutralButton",
+      "r": "w"
+    },
+    {
+      "c": "AlertDialog$Builder",
+      "o": "setPositiveButton",
+      "r": "B"
+    },
+    {
+      "c": "AlertDialog$Builder",
+      "o": "setTitle",
+      "r": "D"
+    },
+    {
+      "c": "AlertDialog$Builder",
+      "o": "setViewV",
+      "r": "K"
+    },
+    {
+      "c": "AlertDialog$Builder",
+      "o": "setViewVI",
+      "r": "L"
+    },
+    {
+      "c": "AlertDialog$Builder",
+      "o": "show",
+      "r": "N"
+    },
+    {
+      "c": "AlertDialog$OnButtonClickListener",
+      "o": "onClick",
+      "r": "a"
+    },
+    {
+      "c": "Theme",
+      "o": "isCurrentThemeDark",
+      "r": "Z2"
+    },
+    {
+      "c": "ChatMessageCell",
+      "o": "getMessageObject",
+      "r": "q"
+    },
+    {
+      "c": "ChatMessageCell",
+      "o": "measureTime",
+      "r": "y8"
+    },
+    {
+      "c": "HeaderCell",
+      "o": "setTextC",
+      "r": "j"
+    },
+    {
+      "c": "HeaderCell",
+      "o": "setTextCZ",
+      "r": "k"
+    },
+    {
+      "c": "TextCheckCell",
+      "o": "isChecked",
+      "r": "f"
+    },
+    {
+      "c": "TextCheckCell",
+      "o": "setChecked",
+      "r": "k"
+    },
+    {
+      "c": "TextCheckCell",
+      "o": "setTextAndCheck",
+      "r": "r"
+    },
+    {
+      "c": "TextCheckCell",
+      "o": "setTextAndValueAndCheck",
+      "r": "s"
+    },
+    {
+      "c": "TextSettingsCell",
+      "o": "setText",
+      "r": "j"
+    },
+    {
+      "c": "TextSettingsCell",
+      "o": "setTextAndValueCCZ",
+      "r": "k"
+    },
+    {
+      "c": "TextSettingsCell",
+      "o": "setTextAndValueCCZZ",
+      "r": "l"
+    },
+    {
+      "c": "ChatActivity",
+      "o": "createPinnedMessageView",
+      "r": "Su"
+    },
+    {
+      "c": "ChatActivity",
+      "o": "createView",
+      "r": "C0"
+    },
+    {
+      "c": "ChatActivity",
+      "o": "fillMessageMenu",
+      "r": "Dv"
+    },
+    {
+      "c": "ChatActivity",
+      "o": "hasSelectedNoforwardsMessage",
+      "r": "hx"
+    },
+    {
+      "c": "ChatActivity",
+      "o": "isSwipeBackEnabled",
+      "r": "T1"
+    },
+    {
+      "c": "ChatActivity",
+      "o": "processSelectedOption",
+      "r": "eI"
+    },
+    {
+      "c": "ChatActivity",
+      "o": "scrollToMessageIdIIZIZI",
+      "r": "L"
+    },
+    {
+      "c": "ChatActivity",
+      "o": "scrollToMessageIdIIZIZIIABR",
+      "r": "KI"
+    },
+    {
+      "c": "ChatActivity",
+      "o": "scrollToMessageIdIIZIZIIR",
+      "r": "JI"
+    },
+    {
+      "c": "ChatActivity",
+      "o": "sendSecretMediaDelete",
+      "r": "WI"
+    },
+    {
+      "c": "ChatActivity",
+      "o": "sendSecretMessageRead",
+      "r": "XI"
+    },
+    {
+      "c": "ChatActivity",
+      "o": "updatePinnedMessageViewZ",
+      "r": "lL"
+    },
+    {
+      "c": "ChatActivity",
+      "o": "updatePinnedMessageViewZI",
+      "r": "mL"
+    },
+    {
+      "c": "ChatActivity$ChatMessageCellDelegate",
+      "o": "didPressImage",
+      "r": "k0"
+    },
+    {
+      "c": "PhotoViewer",
+      "o": "getInstance",
+      "r": "Hc"
+    },
+    {
+      "c": "PhotoViewer",
+      "o": "openPhotoAIJJJO",
+      "r": "eh"
+    },
+    {
+      "c": "PhotoViewer",
+      "o": "openPhotoAIO",
+      "r": "fh"
+    },
+    {
+      "c": "PhotoViewer",
+      "o": "openPhotoIOO",
+      "r": "dh"
+    },
+    {
+      "c": "PhotoViewer",
+      "o": "openPhotoOIOJJJO",
+      "r": "gh"
+    },
+    {
+      "c": "PhotoViewer",
+      "o": "openPhotoOJJJOZ",
+      "r": "hh"
+    },
+    {
+      "c": "PhotoViewer",
+      "o": "openPhotoOO",
+      "r": "lh"
+    },
+    {
+      "c": "PhotoViewer",
+      "o": "openPhotoOOJJJO",
+      "r": "jh"
+    },
+    {
+      "c": "PhotoViewer",
+      "o": "openPhotoOOO",
+      "r": "kh"
+    },
+    {
+      "c": "PhotoViewer",
+      "o": "openPhotoOOOOAAAIOOJJJZOI",
+      "r": "ih"
+    },
+    {
+      "c": "PhotoViewer",
+      "o": "setIsAboutToSwitchToIndexIZZ",
+      "r": "ei"
+    },
+    {
+      "c": "PhotoViewer",
+      "o": "setIsAboutToSwitchToIndexIZZZ",
+      "r": "fi"
+    },
+    {
+      "c": "PhotoViewer",
+      "o": "setParentActivityA",
+      "r": "ki"
+    },
+    {
+      "c": "PhotoViewer",
+      "o": "setParentActivityAO",
+      "r": "mi"
+    },
+    {
+      "c": "PhotoViewer",
+      "o": "setParentActivityAOO",
+      "r": "li"
+    },
+    {
+      "c": "PhotoViewer",
+      "o": "setParentActivityO",
+      "r": "ni"
+    },
+    {
+      "c": "PhotoViewer",
+      "o": "setParentActivityOO",
+      "r": "oi"
+    },
+    {
+      "c": "PhotoViewer$PhotoViewerProvider",
+      "o": "getPlaceForPhoto",
+      "r": "n"
+    },
+    {
+      "c": "ProfileActivity",
+      "o": "isSwipeBackEnabled",
+      "r": "T1"
+    },
+    {
+      "c": "ProfileActivity",
+      "o": "updateProfileData",
+      "r": "fk"
+    },
+    {
+      "c": "SecretMediaViewer",
+      "o": "closePhoto",
+      "r": "o0"
+    },
+    {
+      "c": "SecretMediaViewer",
+      "o": "openMedia",
+      "r": "N0"
+    },
+    {
+      "c": "SettingsActivity",
+      "o": "fillItems",
+      "r": "p4"
+    },
+    {
+      "c": "SettingsActivity",
+      "o": "onClick",
+      "r": "P4"
+    },
+    {
+      "c": "SettingsActivity$SettingCell",
+      "o": "set",
+      "r": "a"
+    },
+    {
+      "c": "SettingsActivity$SettingCell$Factory",
+      "o": "ofIIIIC",
+      "r": "k"
+    },
+    {
+      "c": "SettingsActivity$SettingCell$Factory",
+      "o": "ofIIIICC",
+      "r": "l"
+    },
+    {
+      "c": "SettingsActivity$SettingCell$Factory",
+      "o": "ofIIIICCC",
+      "r": "m"
+    },
+    {
+      "c": "PeerStoriesView$StoryItemHolder",
+      "o": "allowScreenshots",
+      "r": "d"
+    },
+    {
+      "c": "StoriesController",
+      "o": "hasStories",
+      "r": "h1"
+    },
+    {
+      "c": "StoriesController",
+      "o": "hasStoriesJ",
+      "r": "i1"
+    }
+  ]
+}

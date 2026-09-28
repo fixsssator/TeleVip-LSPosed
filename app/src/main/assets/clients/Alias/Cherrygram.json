@@ -1,0 +1,23 @@
+{
+  "methodAlias": {
+    "Browser#openUrl": "openUrlCS",
+    "MessagesController#storyEntitiesAllowed2": "storyEntitiesAllowedO",
+    "PhotoViewer#setIsAboutToSwitchToIndex": "setIsAboutToSwitchToIndexIZZZ",
+    "MessagesStorage#markMessagesAsDeleted": "markMessagesAsDeletedJAZZII",
+    "MessagesController#deleteMessages": "deleteMessagesAAOJZIZJOIZI",
+    "MessageObject#getDialogId": "getDialogIdO",
+    "TextSettingsCell#setTextAndValue": "setTextAndValueCCZZ",
+    "MessagesStorage#putMessages": "putMessagesOJIIZIJ",
+    "MessagesController#isChatNoForwards": "isChatNoForwardsO",
+    "ChatActivity#updatePinnedMessageView": "updatePinnedMessageViewZI",
+    "PhotoViewer#openPhoto": "openPhotoOJJJOZ",
+    "SettingsActivity$SettingCell$Factory#of": "ofIIIICC",
+    "HeaderCell#setText": "setTextC",
+    "DispatchQueue#postRunnable": "postRunnableR",
+    "SQLitePreparedStatement#bindByteBuffer": "bindByteBufferIO",
+    "SQLitePreparedStatement#bindLong": "bindLongIJ",
+    "LongSparseArray#get": "getJ",
+    "AlertDialog$Builder#setView": "setViewV",
+    "FileLoader#getPathToMessage": "getPathToMessageO"
+  }
+}

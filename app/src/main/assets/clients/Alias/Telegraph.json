@@ -1,0 +1,15 @@
+{
+  "methodAlias": {
+    "MessagesController#storyEntitiesAllowed2": "storyEntitiesAllowedO",
+    "PhotoViewer#setIsAboutToSwitchToIndex": "setIsAboutToSwitchToIndexIZZZ",
+    "MessagesStorage#markMessagesAsDeleted": "markMessagesAsDeletedJAZZII",
+    "MessagesController#deleteMessages": "deleteMessagesAAOJZIZJOIZI",
+    "TextSettingsCell#setTextAndValue": "setTextAndValueCCZZ",
+    "MessagesStorage#putMessages": "putMessagesOJIIZIJ",
+    "MessagesController#isChatNoForwards": "isChatNoForwardsO",
+    "ChatActivity#updatePinnedMessageView": "updatePinnedMessageViewZI",
+    "PhotoViewer#openPhoto": "openPhotoOJJJOZ",
+    "HeaderCell#setText": "setTextC",
+    "AlertDialog$Builder#setView": "setViewV"
+  }
+}
