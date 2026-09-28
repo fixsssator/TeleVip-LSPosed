@@ -40,7 +40,7 @@ jobs:
       - name: Rename APK
         run: |
           mkdir -p artifacts
-          cp app/build/outputs/apk/release/app-release.apk "artifacts/TeleVip-$${GITHUB_SHA::7}.apk"
+          cp app/build/outputs/apk/release/app-release.apk "artifacts/TeleVip-${GITHUB_SHA::7}.apk"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
