@@ -1,0 +1,99 @@
+apply plugin: 'com.android.application'
+
+android {
+    namespace 'com.my.televip'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId "com.my.televip"
+        minSdk 27
+        targetSdk 36
+        versionCode 336
+        versionName "3.6.4"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+
+dependencies {
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.google.code.gson:gson:2.13.2")
+    implementation(libs.jcal)
+    compileOnly libs.api
+    implementation(libs.gson)
+    implementation(libs.appcompat)
+    implementation(libs.material)
+}
+tasks.register("copyLargestDexAsJava") {
+
+    dependsOn(":settingsadapter:assembleDebug")
+
+    doLast {
+        def apkFile = fileTree("$rootDir/settingsadapter/build/intermediates/apk/debug")
+                .matching { include "*.apk" }
+                .singleFile
+
+        def tempDir = new File(buildDir, "tmp/dexExtract")
+        tempDir.mkdirs()
+
+        copy {
+            from zipTree(apkFile)
+            into tempDir
+            include "classes*.dex"
+        }
+
+        def dexFiles = fileTree(tempDir).matching { include "classes*.dex" }.files
+
+        if (dexFiles.isEmpty()) {
+            throw new GradleException("No dex files found!")
+        }
+
+        def largestDex = dexFiles.max { it.length() }
+
+        // قراءة dex كـ bytes
+        byte[] dexBytes = largestDex.bytes
+
+        def hex = dexBytes.collect { String.format("%02X", it) }.join("")
+
+        def outputDir = file("$projectDir/src/main/java/com/my/televip/dex")
+        outputDir.mkdirs()
+
+        def javaFile = new File(outputDir, "DexHolder.java")
+
+        javaFile.text = """
+package com.my.televip.dex;
+
+public class DexHolder {
+    public static final byte[] DEX_BYTES = hexToBytes("${hex}");
+
+    private static byte[] hexToBytes(String hex) {
+        int len = hex.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4)
+                                + Character.digit(hex.charAt(i+1), 16));
+        }
+        return data;
+    }
+}
+"""
+        println "Generated DexHolder with largest dex: ${largestDex.name}"
+    }
+}
+
+preBuild.dependsOn("copyLargestDexAsJava")
