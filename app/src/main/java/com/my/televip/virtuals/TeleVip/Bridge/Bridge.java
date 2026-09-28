@@ -1,0 +1,186 @@
+package com.my.televip.virtuals.TeleVip.Bridge;
+
+import android.content.Context;
+import android.util.TypedValue;
+import android.view.View;
+
+import com.my.televip.Class.ClassLoad;
+import com.my.televip.Class.ClassNames;
+import com.my.televip.base.BaseMethodHook;
+import com.my.televip.dex.DexInjector;
+import com.my.televip.hooks.HMethod;
+import com.my.televip.logging.Logger;
+import com.my.televip.settings.controller.SettingsController;
+import com.my.televip.settings.ui.SettingsAdapter;
+import com.my.televip.ui.ThemeColors;
+import com.my.televip.ui.Cells.ExpandableTextCheckCell;
+import com.my.televip.virtuals.ui.Cells.HeaderCell;
+import com.my.televip.virtuals.ui.Cells.ShadowSectionCell;
+import com.my.televip.virtuals.ui.Cells.TextCheckCell;
+import com.my.televip.ui.Cells.TextInfoCell;
+import com.my.televip.virtuals.ui.Cells.TextSettingsCell;
+
+import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedHelpers;
+
+public class Bridge {
+
+    public static final TypedValue outValue = new TypedValue();
+
+    public static Object getLayoutManager(Context context){
+        return XposedHelpers.callStaticMethod(ClassLoad.getClass(ClassNames.SETTINGS_ADAPTER, DexInjector.classLoader), "getLayoutManager", context);
+    }
+
+    public static void init(SettingsController settingsController){
+        if (DexInjector.classLoader == null) return;
+        try {
+            Class<?> bridgeClass = XposedHelpers.findClassIfExists("com.televip.SettingsAdapter.Bridge", DexInjector.classLoader);
+            Class<?> textCheckCellClass = XposedHelpers.findClassIfExists("com.televip.SettingsAdapter.SettingsAdapter$TextCheckCellHolder", DexInjector.classLoader);
+            Class<?> expandableTextCheckCellClass = XposedHelpers.findClassIfExists("com.televip.SettingsAdapter.SettingsAdapter$ExpandableTextCheckCellHolder", DexInjector.classLoader);
+            Class<?> textSettingsCellClass = XposedHelpers.findClassIfExists("com.televip.SettingsAdapter.SettingsAdapter$TextSettingsCellHolder", DexInjector.classLoader);
+            Class<?> headerCellClass = XposedHelpers.findClassIfExists("com.televip.SettingsAdapter.SettingsAdapter$HeaderCellHolder", DexInjector.classLoader);
+            Class<?> shadowSectionCellClass = XposedHelpers.findClassIfExists("com.televip.SettingsAdapter.SettingsAdapter$ShadowSectionCellHolder", DexInjector.classLoader);
+            Class<?> textInfoCellClass = XposedHelpers.findClassIfExists("com.televip.SettingsAdapter.SettingsAdapter$TextInfoCellHolder", DexInjector.classLoader);
+
+            HMethod.hookMethod(bridgeClass, "getRow", int.class, new BaseMethodHook() {
+                @Override
+                protected void beforeMethod(XC_MethodHook.MethodHookParam param) {
+                    param.setResult(SettingsAdapter.getRow((int) param.args[0]));
+                }
+            });
+
+            HMethod.hookMethod(bridgeClass, "log", String.class, new BaseMethodHook() {
+                @Override
+                protected void beforeMethod(XC_MethodHook.MethodHookParam param) {
+                    Logger.l((String) param.args[0]);
+                }
+            });
+
+            HMethod.hookMethod(bridgeClass, "getRowCount", new BaseMethodHook() {
+                @Override
+                protected void beforeMethod(XC_MethodHook.MethodHookParam param) {
+                    param.setResult(SettingsAdapter.getRowCount());
+                }
+            });
+            
+            HMethod.hookMethod(bridgeClass, "onBindViewHolder", Object.class, int.class, int.class, new BaseMethodHook() {
+                @Override
+                protected void beforeMethod(XC_MethodHook.MethodHookParam param) {
+                   SettingsAdapter.onBindViewHolder(param.args[0], settingsController, (int) param.args[1], (int) param.args[2]);
+                }
+            });
+
+            settingsController.getContext().getTheme().resolveAttribute(
+                    android.R.attr.selectableItemBackground,
+                    outValue,
+                    true
+            );
+
+            XposedHelpers.findAndHookConstructor(textCheckCellClass, View.class, Object.class, new BaseMethodHook() {
+                @Override
+                protected void beforeMethod(XC_MethodHook.MethodHookParam param) {
+                    TextCheckCell textCheckCell = createTextCheckCell(settingsController.getContext());
+                    param.args[0] = textCheckCell.getView();
+                    param.args[1] = textCheckCell.textCell;
+                }
+            });
+
+            XposedHelpers.findAndHookConstructor(expandableTextCheckCellClass, View.class, Object.class, new BaseMethodHook() {
+                @Override
+                protected void beforeMethod(XC_MethodHook.MethodHookParam param) {
+                    ExpandableTextCheckCell expandableTextCheckCell = createExpandableTextCheckCell(settingsController.getContext());
+                    param.args[0] = expandableTextCheckCell;
+                    param.args[1] = expandableTextCheckCell;
+                }
+            });
+
+            XposedHelpers.findAndHookConstructor(textSettingsCellClass, View.class, Object.class, new BaseMethodHook() {
+                @Override
+                protected void beforeMethod(XC_MethodHook.MethodHookParam param) {
+                    TextSettingsCell textSettingsCell = createTextSettingsCell(settingsController.getContext());
+                    param.args[0] = textSettingsCell.getView();
+                    param.args[1] = textSettingsCell.textSettingsCell;
+                }
+            });
+
+            XposedHelpers.findAndHookConstructor(headerCellClass, View.class, Object.class, new BaseMethodHook() {
+                @Override
+                protected void beforeMethod(XC_MethodHook.MethodHookParam param) {
+                    HeaderCell header = createHeaderCell(settingsController.getContext());
+                    param.args[0] = header.getView();
+                    param.args[1] = header.headerCell;
+                }
+            });
+
+            XposedHelpers.findAndHookConstructor(shadowSectionCellClass, View.class, new BaseMethodHook() {
+                @Override
+                protected void beforeMethod(XC_MethodHook.MethodHookParam param) {
+                    param.args[0] = new ShadowSectionCell(settingsController.getContext()).getView();
+                }
+            });
+
+            XposedHelpers.findAndHookConstructor(textInfoCellClass, View.class, new BaseMethodHook() {
+                @Override
+                protected void beforeMethod(XC_MethodHook.MethodHookParam param) {
+                    TextInfoCell textInfoCell = createTextInfoCell(settingsController.getContext());
+                    param.args[0] = textInfoCell;
+                }
+            });
+
+        } catch (Throwable e){
+            Logger.e(e);
+        }
+    }
+
+    public static TextCheckCell createTextCheckCell(Context context) {
+
+        TextCheckCell textCheckCell = new TextCheckCell(context);
+
+        textCheckCell.getView().setBackgroundColor(
+                ThemeColors.getBackgroundWhiteOrBlueColor()
+        );
+
+        textCheckCell.getView().setBackgroundResource(outValue.resourceId);
+        textCheckCell.getView().setClickable(true);
+        textCheckCell.getView().setFocusable(true);
+
+        return textCheckCell;
+    }
+    public static ExpandableTextCheckCell createExpandableTextCheckCell(Context context) {
+
+        ExpandableTextCheckCell expandableTextCheckCell = new ExpandableTextCheckCell(context);
+
+        expandableTextCheckCell.setBackgroundColor(
+                ThemeColors.getBackgroundWhiteOrBlueColor()
+        );
+
+        expandableTextCheckCell.setBackgroundResource(outValue.resourceId);
+        expandableTextCheckCell.setBChildResource(outValue.resourceId);
+        expandableTextCheckCell.setClickable(true);
+        expandableTextCheckCell.setFocusable(true);
+
+        return expandableTextCheckCell;
+    }
+
+    public static TextSettingsCell createTextSettingsCell(Context context) {
+        TextSettingsCell textSettingsCell = new TextSettingsCell(context);
+        textSettingsCell.getView().setBackgroundColor(ThemeColors.getBackgroundWhiteOrBlueColor());
+        textSettingsCell.getView().setBackgroundResource(outValue.resourceId);
+        textSettingsCell.getView().setClickable(true);
+        textSettingsCell.getView().setFocusable(true);
+
+        return textSettingsCell;
+    }
+    public static HeaderCell createHeaderCell(Context context) {
+        HeaderCell header = new HeaderCell(context);
+        header.getView().setBackgroundColor(ThemeColors.getBackgroundWhiteOrBlueColor());
+        return header;
+    }
+
+    public static TextInfoCell createTextInfoCell(Context context) {
+        TextInfoCell textInfoCell = new TextInfoCell(context);
+        textInfoCell.setBackgroundColor(ThemeColors.getBackgroundGrayColor());
+        return textInfoCell;
+    }
+
+}

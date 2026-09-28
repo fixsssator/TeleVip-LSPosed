@@ -1,0 +1,41 @@
+package com.my.televip.virtuals.ui.Cells;
+
+import android.content.Context;
+import android.view.View;
+import android.widget.TextView;
+
+import com.my.televip.Class.ClassLoad;
+import com.my.televip.Class.ClassNames;
+import com.my.televip.obfuscate.Obfuscate;
+
+import de.robv.android.xposed.XposedHelpers;
+
+public class TextSettingsCell {
+
+    public Object textSettingsCell;
+
+    public TextSettingsCell(Context context){
+        textSettingsCell = XposedHelpers.newInstance(ClassLoad.getClass(ClassNames.TEXT_SETTINGS_CELL), context);
+    }
+
+    public TextSettingsCell(Object obj){
+        textSettingsCell = obj;
+    }
+
+    public View getView(){
+        return (View) textSettingsCell;
+    }
+
+    public void setText(CharSequence text, boolean divider){
+        XposedHelpers.callMethod(textSettingsCell, Obfuscate.getMethodName("TextSettingsCell","setText"), text, divider);
+    }
+
+    public void setTextAndValue(CharSequence text, String value, boolean animated, boolean divider){
+        XposedHelpers.callMethod(textSettingsCell, Obfuscate.getMethodName("TextSettingsCell","setTextAndValue"), text, value, animated, divider);
+    }
+
+    public TextView getTextView(){
+        return (TextView) XposedHelpers.getObjectField(textSettingsCell,Obfuscate.getFieldName("TextSettingsCell","textView"));
+    }
+
+}
