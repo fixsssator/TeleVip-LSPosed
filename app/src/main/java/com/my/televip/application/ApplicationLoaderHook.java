@@ -1,0 +1,24 @@
+package com.my.televip.application;
+
+import android.content.Context;
+
+import com.my.televip.Class.ClassLoad;
+import com.my.televip.Class.ClassNames;
+import com.my.televip.obfuscate.Obfuscate;
+
+import de.robv.android.xposed.XposedHelpers;
+
+public class ApplicationLoaderHook {
+
+    private static Context applicationContext;
+
+    public static Context getApplicationContext() {
+        if (applicationContext == null) {
+            applicationContext = (Context) XposedHelpers.getStaticObjectField(
+                    ClassLoad.getClass(ClassNames.APPLICATION_LOADER),
+                    Obfuscate.getFieldName("ApplicationLoader", "applicationContext")
+            );
+        }
+        return applicationContext;
+    }
+}
