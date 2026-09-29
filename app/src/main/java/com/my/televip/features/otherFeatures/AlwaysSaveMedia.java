@@ -16,7 +16,7 @@ public class AlwaysSaveMedia {
         try {
             if (ClassLoad.getClass(ClassNames.PHOTO_VIEWER) != null) {
 
-                HMethod.hookMethod(ClassLoad.getClass(ClassNames.PHOTO_VIEWER), Obfuscate.getMethodName("PhotoViewer", "setIsAboutToSwitchToIndex"), ArgsResolver.merge("setIsAboutToSwitchToIndex", new Class[]{int.class, boolean.class, boolean.class, boolean.class}, new BaseMethodHook() {
+                HMethod.hookLoose(ClassLoad.getClass(ClassNames.PHOTO_VIEWER), Obfuscate.getMethodName("PhotoViewer", "setIsAboutToSwitchToIndex"), ArgsResolver.merge("setIsAboutToSwitchToIndex", new Class[]{int.class, boolean.class, boolean.class, boolean.class}, new BaseMethodHook() {
                     @Override
                     protected void afterMethod(MethodHookParam param) {
                         final PhotoViewer photoViewer = new PhotoViewer(param.thisObject);

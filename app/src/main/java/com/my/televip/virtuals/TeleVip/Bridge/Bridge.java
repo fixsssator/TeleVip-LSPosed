@@ -10,9 +10,11 @@ import com.my.televip.base.BaseMethodHook;
 import com.my.televip.dex.DexInjector;
 import com.my.televip.hooks.HMethod;
 import com.my.televip.logging.Logger;
+import com.my.televip.obfuscate.Obfuscate;
 import com.my.televip.settings.controller.SettingsController;
 import com.my.televip.settings.ui.SettingsAdapter;
 import com.my.televip.ui.ThemeColors;
+import com.my.televip.utils.Utils;
 import com.my.televip.ui.Cells.ExpandableTextCheckCell;
 import com.my.televip.virtuals.ui.Cells.HeaderCell;
 import com.my.televip.virtuals.ui.Cells.ShadowSectionCell;
@@ -31,16 +33,81 @@ public class Bridge {
         return XposedHelpers.callStaticMethod(ClassLoad.getClass(ClassNames.SETTINGS_ADAPTER, DexInjector.classLoader), "getLayoutManager", context);
     }
 
+
+    private static Class<?> loadInjected(String name) {
+        try {
+            Class<?> c = XposedHelpers.findClassIfExists(name, DexInjector.classLoader);
+            if (c == null) Logger.w("Injected class not found: " + name);
+            return c;
+        } catch (Throwable t) {
+            StringBuilder why = new StringBuilder(String.valueOf(t));
+            for (Throwable c = t.getCause(); c != null; c = c.getCause()) why.append(" <= ").append(c);
+            Logger.w("Injected class cannot be loaded: " + name + " -> " + why);
+            return null;
+        }
+    }
+
+    private static void hookCtor(Class<?> cls, String label, Object... typesAndCallback) {
+        try {
+            if (cls == null) {
+                Logger.w("Skip constructor hook, class missing: " + label);
+                return;
+            }
+            XposedHelpers.findAndHookConstructor(cls, typesAndCallback);
+        } catch (Throwable t) {
+            Logger.e(t);
+        }
+    }
+
+    /** Logs what Telegram actually has where the settings adapter expects androidx.recyclerview. */
+    private static void diagnoseRecyclerView() {
+        try {
+            ClassLoader cl = Utils.classLoader;
+            StringBuilder sb = new StringBuilder("settings-adapter diagnostics:");
+            String[] names = {
+                    "androidx.recyclerview.widget.RecyclerView",
+                    "androidx.recyclerview.widget.RecyclerView$Adapter",
+                    "androidx.recyclerview.widget.RecyclerView$ViewHolder",
+                    "androidx.recyclerview.widget.LinearLayoutManager",
+                    "androidx.annotation.NonNull"
+            };
+            for (String n : names) {
+                boolean ok;
+                try { ok = XposedHelpers.findClassIfExists(n, cl) != null; } catch (Throwable t) { ok = false; }
+                sb.append(" ").append(n.substring(n.lastIndexOf('.') + 1)).append("=").append(ok);
+            }
+            try {
+                Class<?> rlv = XposedHelpers.findClassIfExists(
+                        Obfuscate.getClassName("org.telegram.ui.Components.RecyclerListView"), cl);
+                sb.append(" | Telegram RecyclerListView extends ")
+                        .append(rlv == null ? "(class not found)" : String.valueOf(rlv.getSuperclass()));
+            } catch (Throwable t) {
+                sb.append(" | RecyclerListView lookup failed: ").append(t);
+            }
+            Logger.w(sb.toString());
+        } catch (Throwable t) {
+            Logger.e(t);
+        }
+    }
+
     public static void init(SettingsController settingsController){
         if (DexInjector.classLoader == null) return;
         try {
-            Class<?> bridgeClass = XposedHelpers.findClassIfExists("com.televip.SettingsAdapter.Bridge", DexInjector.classLoader);
-            Class<?> textCheckCellClass = XposedHelpers.findClassIfExists("com.televip.SettingsAdapter.SettingsAdapter$TextCheckCellHolder", DexInjector.classLoader);
-            Class<?> expandableTextCheckCellClass = XposedHelpers.findClassIfExists("com.televip.SettingsAdapter.SettingsAdapter$ExpandableTextCheckCellHolder", DexInjector.classLoader);
-            Class<?> textSettingsCellClass = XposedHelpers.findClassIfExists("com.televip.SettingsAdapter.SettingsAdapter$TextSettingsCellHolder", DexInjector.classLoader);
-            Class<?> headerCellClass = XposedHelpers.findClassIfExists("com.televip.SettingsAdapter.SettingsAdapter$HeaderCellHolder", DexInjector.classLoader);
-            Class<?> shadowSectionCellClass = XposedHelpers.findClassIfExists("com.televip.SettingsAdapter.SettingsAdapter$ShadowSectionCellHolder", DexInjector.classLoader);
-            Class<?> textInfoCellClass = XposedHelpers.findClassIfExists("com.televip.SettingsAdapter.SettingsAdapter$TextInfoCellHolder", DexInjector.classLoader);
+            Class<?> bridgeClass = loadInjected("com.televip.SettingsAdapter.Bridge");
+            Class<?> textCheckCellClass = loadInjected("com.televip.SettingsAdapter.SettingsAdapter$TextCheckCellHolder");
+            Class<?> expandableTextCheckCellClass = loadInjected("com.televip.SettingsAdapter.SettingsAdapter$ExpandableTextCheckCellHolder");
+            Class<?> textSettingsCellClass = loadInjected("com.televip.SettingsAdapter.SettingsAdapter$TextSettingsCellHolder");
+            Class<?> headerCellClass = loadInjected("com.televip.SettingsAdapter.SettingsAdapter$HeaderCellHolder");
+            Class<?> shadowSectionCellClass = loadInjected("com.televip.SettingsAdapter.SettingsAdapter$ShadowSectionCellHolder");
+            Class<?> textInfoCellClass = loadInjected("com.televip.SettingsAdapter.SettingsAdapter$TextInfoCellHolder");
+
+            if (bridgeClass == null || textCheckCellClass == null || expandableTextCheckCellClass == null
+                    || textSettingsCellClass == null || headerCellClass == null
+                    || shadowSectionCellClass == null || textInfoCellClass == null) {
+                Logger.w("TeleVip settings screen is unavailable: its helper classes could not be loaded in this Telegram build.");
+                diagnoseRecyclerView();
+                return;
+            }
 
             HMethod.hookMethod(bridgeClass, "getRow", int.class, new BaseMethodHook() {
                 @Override
@@ -76,7 +143,7 @@ public class Bridge {
                     true
             );
 
-            XposedHelpers.findAndHookConstructor(textCheckCellClass, View.class, Object.class, new BaseMethodHook() {
+            hookCtor(textCheckCellClass, "textCheckCellClass", View.class, Object.class, new BaseMethodHook() {
                 @Override
                 protected void beforeMethod(XC_MethodHook.MethodHookParam param) {
                     TextCheckCell textCheckCell = createTextCheckCell(settingsController.getContext());
@@ -85,7 +152,7 @@ public class Bridge {
                 }
             });
 
-            XposedHelpers.findAndHookConstructor(expandableTextCheckCellClass, View.class, Object.class, new BaseMethodHook() {
+            hookCtor(expandableTextCheckCellClass, "expandableTextCheckCellClass", View.class, Object.class, new BaseMethodHook() {
                 @Override
                 protected void beforeMethod(XC_MethodHook.MethodHookParam param) {
                     ExpandableTextCheckCell expandableTextCheckCell = createExpandableTextCheckCell(settingsController.getContext());
@@ -94,7 +161,7 @@ public class Bridge {
                 }
             });
 
-            XposedHelpers.findAndHookConstructor(textSettingsCellClass, View.class, Object.class, new BaseMethodHook() {
+            hookCtor(textSettingsCellClass, "textSettingsCellClass", View.class, Object.class, new BaseMethodHook() {
                 @Override
                 protected void beforeMethod(XC_MethodHook.MethodHookParam param) {
                     TextSettingsCell textSettingsCell = createTextSettingsCell(settingsController.getContext());
@@ -103,7 +170,7 @@ public class Bridge {
                 }
             });
 
-            XposedHelpers.findAndHookConstructor(headerCellClass, View.class, Object.class, new BaseMethodHook() {
+            hookCtor(headerCellClass, "headerCellClass", View.class, Object.class, new BaseMethodHook() {
                 @Override
                 protected void beforeMethod(XC_MethodHook.MethodHookParam param) {
                     HeaderCell header = createHeaderCell(settingsController.getContext());
@@ -112,14 +179,14 @@ public class Bridge {
                 }
             });
 
-            XposedHelpers.findAndHookConstructor(shadowSectionCellClass, View.class, new BaseMethodHook() {
+            hookCtor(shadowSectionCellClass, "shadowSectionCellClass", View.class, new BaseMethodHook() {
                 @Override
                 protected void beforeMethod(XC_MethodHook.MethodHookParam param) {
                     param.args[0] = new ShadowSectionCell(settingsController.getContext()).getView();
                 }
             });
 
-            XposedHelpers.findAndHookConstructor(textInfoCellClass, View.class, new BaseMethodHook() {
+            hookCtor(textInfoCellClass, "textInfoCellClass", View.class, new BaseMethodHook() {
                 @Override
                 protected void beforeMethod(XC_MethodHook.MethodHookParam param) {
                     TextInfoCell textInfoCell = createTextInfoCell(settingsController.getContext());

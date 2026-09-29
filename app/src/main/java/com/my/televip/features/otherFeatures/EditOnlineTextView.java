@@ -32,7 +32,7 @@ public class EditOnlineTextView {
         try {
             if (!isEnable) {
                 isEnable = true;
-                HMethod.hookMethod(ClassLoad.getClass(ClassNames.PROFILE_ACTIVITY),
+                HMethod.hookLoose(ClassLoad.getClass(ClassNames.PROFILE_ACTIVITY),
                         Obfuscate.getMethodName("ProfileActivity", "updateProfileData"),
                         ArgsResolver.merge("updateProfileData", new Class[]{boolean.class},
                                 new BaseMethodHook() {

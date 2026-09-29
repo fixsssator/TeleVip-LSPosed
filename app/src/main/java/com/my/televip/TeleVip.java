@@ -17,6 +17,7 @@ public class TeleVip {
     public static void startHook() {
         try {
             resolverRegistry.loadParameter();
+            Logger.l("TeleVip " + Utils.MODULE_VERSION + " started on Telegram " + Logger.hostVersion());
             Translator.init();
             AndroidUtilities.init();
             DexInjector.injectDex(Utils.classLoader);

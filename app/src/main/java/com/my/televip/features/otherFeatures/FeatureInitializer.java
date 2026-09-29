@@ -25,7 +25,9 @@ public class FeatureInitializer {
 
                 HMethod.hookMethod(
                         actionBarClass,
-                        Obfuscate.getMethodName("ActionBar", "setActionBarMenuOnItemClick"), ClassLoad.getClass(ClassNames.ACTION_BAR_MENU_ON_ITEM_CLICK),
+                        Obfuscate.getMethodName("ActionBar", "setActionBarMenuOnItemClick"),
+                        // class may be renamed in newer builds; null = wildcard, the method is still found by name
+                        XposedHelpers.findClassIfExists(Obfuscate.getClassName(ClassNames.ACTION_BAR_MENU_ON_ITEM_CLICK), Utils.classLoader),
                         new BaseMethodHook() {
                             @Override
                             protected void beforeMethod(MethodHookParam param) {

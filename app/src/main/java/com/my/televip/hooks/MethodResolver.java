@@ -2,7 +2,9 @@ package com.my.televip.hooks;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Finds the method to hook without requiring the exact signature the module was built against.
@@ -71,6 +73,44 @@ public final class MethodResolver {
         return new Resolution(best, false);
     }
 
+
+    /** Every non-abstract, non-bridge method called {@code name} in cls and its superclasses. */
+    public static List<Method> byName(Class<?> cls, String name) {
+        List<Method> out = new ArrayList<>();
+        if (cls == null || name == null) return out;
+        for (Class<?> c = cls; c != null && c != Object.class; c = c.getSuperclass()) {
+            for (Method m : c.getDeclaredMethods()) {
+                if (!m.getName().equals(name)) continue;
+                if (m.isBridge() || m.isSynthetic() || Modifier.isAbstract(m.getModifiers())) continue;
+                m.setAccessible(true);
+                out.add(m);
+            }
+        }
+        return out;
+    }
+
+    /** Human-readable "what does this class have instead": same-name overloads and similar names. */
+    public static String candidates(Class<?> cls, String name) {
+        if (cls == null || name == null) return "";
+        String low = name.toLowerCase();
+        List<String> found = new ArrayList<>();
+        try {
+            for (Class<?> c = cls; c != null && c != Object.class && found.size() < 10; c = c.getSuperclass()) {
+                for (Method m : c.getDeclaredMethods()) {
+                    if (m.isBridge() || m.isSynthetic()) continue;
+                    String n = m.getName();
+                    String nl = n.toLowerCase();
+                    boolean similar = n.equals(name) || nl.contains(low) || (nl.length() >= 6 && low.contains(nl));
+                    if (!similar) continue;
+                    found.add(c.getSimpleName() + "#" + n + describe(m.getParameterTypes()));
+                    if (found.size() >= 10) break;
+                }
+            }
+        } catch (Throwable ignored) {
+        }
+        return found.isEmpty() ? " (no similar methods)" : " candidates: " + found;
+    }
+
     static boolean isPrefixCompatible(Class<?>[] expected, Class<?>[] real) {
         if (real.length < expected.length) return false;
         for (int i = 0; i < expected.length; i++) {
@@ -91,7 +131,7 @@ public final class MethodResolver {
 
     public static String describe(Class<?>[] types) {
         String[] s = new String[types.length];
-        for (int i = 0; i < types.length; i++) s[i] = types[i] == null ? "?" : types[i].getName();
+        for (int i = 0; i < types.length; i++) s[i] = types[i] == null ? "?" : types[i].getSimpleName();
         return Arrays.toString(s);
     }
 }

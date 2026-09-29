@@ -28,34 +28,46 @@ public class Logger {
         XposedBridge.log("[TeleVip] [Error] Ai: " + text);
     }
 
+    /** "12.10.6 (69700)" of the host app, or "?" if it is not available yet. */
+    public static String hostVersion() {
+        try {
+            PackageManager pm = ApplicationLoaderHook.getApplicationContext().getPackageManager();
+            PackageInfo info = pm.getPackageInfo(ApplicationLoaderHook.getApplicationContext().getPackageName(), 0);
+            return info.versionName + " (" + info.versionCode + ")";
+        } catch (Throwable t) {
+            return "?";
+        }
+    }
+
     public static void e(Throwable throwable) {
         try {
+            // One line on purpose: the LSPosed log viewer folds multi-line entries ("N more lines"),
+            // which used to hide exactly the part needed to diagnose a problem.
             StringBuilder log = new StringBuilder();
+            log.append("[TeleVip] [Error] pkgName: ").append(pkgName).append(" ");
 
-            log.append("[TeleVip] [Error] pkgName: ").append(pkgName).append(" ").append(throwable).append("\n");
-            Class<?> resolverClass = ResolverRegistry.getResolverClass();
-            log.append("appName = ").append(resolverClass != null ? resolverClass.getSimpleName() : pkgName).append("\n");
-
-            try {
-                PackageManager pm = ApplicationLoaderHook.getApplicationContext().getPackageManager();
-                PackageInfo info = pm.getPackageInfo(ApplicationLoaderHook.getApplicationContext().getPackageName(), 0);
-                String versionName = info.versionName;
-                int versionCode = info.versionCode;
-
-                log.append("versionName: ").append(versionName).append("\n");
-                log.append("versionCode: ").append(versionCode).append("\n");
-            } catch (Throwable e) {
-                log.append("versionName/versionCode: error retrieving\n");
+            Throwable t = throwable;
+            for (int depth = 0; t != null && depth < 4; depth++) {
+                if (depth > 0) log.append(" <= caused by ");
+                log.append(t);
+                t = t.getCause();
             }
 
-            log.append("OS Version: ").append(Build.VERSION.RELEASE).append("\n");
-            log.append("SDK: ").append(Build.VERSION.SDK_INT).append("\n");
-            log.append("Manufacturer: ").append(Build.MANUFACTURER).append("\n");
-            log.append("Model: ").append(Build.MODEL).append("\n");
-
-            for (StackTraceElement element : throwable.getStackTrace()) {
-                log.append("[TeleVip] at ").append(element.toString()).append("\n");
+            StackTraceElement[] st = throwable.getStackTrace();
+            if (st.length == 0) {
+                log.append(" @ (no stack trace)");
+            } else {
+                log.append(" @ ");
+                for (int i = 0; i < Math.min(10, st.length); i++) {
+                    if (i > 0) log.append(" < ");
+                    log.append(st[i]);
+                }
             }
+
+            log.append(" | Telegram ").append(hostVersion());
+            log.append(" | TeleVip ").append(com.my.televip.utils.Utils.MODULE_VERSION);
+            log.append(" | Android ").append(Build.VERSION.RELEASE).append("/").append(Build.VERSION.SDK_INT);
+            log.append(" ").append(Build.MODEL);
 
             XposedBridge.log(log.toString());
         } catch (Throwable g) {}
