@@ -62,8 +62,10 @@ public class ClassLoad {
 
                     if (name.equals(resolved)) {
                         Logger.w("Not found " + name + " " + Utils.issue);
+                        com.my.televip.hooks.HookStatus.failed("class " + com.my.televip.hooks.HookStatus.shortName(name));
                     } else {
                         Logger.w("Not found " + name + ", " + resolved + " " + Utils.issue);
+                        com.my.televip.hooks.HookStatus.failed("class " + com.my.televip.hooks.HookStatus.shortName(name));
                     }
                 }
             }

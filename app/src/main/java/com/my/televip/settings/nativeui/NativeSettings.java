@@ -25,12 +25,14 @@ import android.widget.Toast;
 
 import com.my.televip.Configs.ConfigItem;
 import com.my.televip.Configs.ConfigManager;
+import com.my.televip.hooks.HookStatus;
 import com.my.televip.language.Keys;
 import com.my.televip.language.Translator;
 import com.my.televip.logging.Logger;
 import com.my.televip.utils.Utils;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * TeleVip settings screen made only of plain Android views.
@@ -177,6 +179,32 @@ public final class NativeSettings {
                 Logger.e(t);
             }
         }
+        try {
+            list.addView(spacer(a, p));
+            list.addView(statusBlock(a, p));
+        } catch (Throwable t) {
+            Logger.e(t);
+        }
+    }
+
+    /** What was hooked in this Telegram build; explains why a switch may do nothing. */
+    private static View statusBlock(Context c, Palette p) {
+        boolean ru = "ru".equals(Locale.getDefault().getLanguage());
+        List<String> bad = HookStatus.failures();
+        StringBuilder sb = new StringBuilder();
+        sb.append("TeleVip ").append(Utils.MODULE_VERSION).append(" / Telegram ").append(Logger.hostVersion()).append("\n");
+        sb.append(ru ? "Подключено хуков: " : "Hooks installed: ").append(HookStatus.okCount()).append("\n");
+        if (bad.isEmpty()) {
+            sb.append(ru ? "Все найденные хуки подключены." : "Every hook was found.");
+        } else {
+            sb.append(ru ? "Не найдено в этой версии Telegram (связанные функции не сработают): "
+                    : "Not found in this Telegram build (related features will not work): ");
+            for (int i = 0; i < bad.size(); i++) sb.append(i > 0 ? ", " : "").append(bad.get(i));
+        }
+        TextView t = text(c, sb.toString(), 12, p.sub, false);
+        t.setPadding(dp(c, 16), dp(c, 12), dp(c, 16), dp(c, 12));
+        t.setTextIsSelectable(true);
+        return t;
     }
 
     private static View switchRow(final Activity a, final ConfigItem item, final ConfigItem parent, Palette p) {

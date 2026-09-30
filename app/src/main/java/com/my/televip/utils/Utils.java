@@ -14,7 +14,7 @@ public class Utils {
     public static String pkgName = null;
     public static String modulePath = null;
     public static ClassLoader classLoader = null;
-    public static final String MODULE_VERSION = "3.7.0";
+    public static final String MODULE_VERSION = "3.7.2";
     public static final String issue = "A hook could not be resolved: this Telegram build changed something TeleVip relies on (or a fork obfuscation map is outdated). Other features keep working; please report it with the log.";
 
     private static WeakReference<Activity> currentActivity;

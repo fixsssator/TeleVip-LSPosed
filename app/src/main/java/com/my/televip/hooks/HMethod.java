@@ -45,6 +45,7 @@ public class HMethod {
             if (r == null) {
                 Logger.w("Method not found: " + cls.getName() + "#" + name + MethodResolver.describe(expected)
                         + MethodResolver.candidates(cls, name));
+                HookStatus.failed(HookStatus.shortName(cls.getName()) + "#" + name);
                 return;
             }
             if (!r.exact) {
@@ -82,6 +83,7 @@ public class HMethod {
             if (r != null) {
                 if (!r.exact) Logger.w("Signature differs, hooked closest match: " + r.method);
                 XposedBridge.hookMethod(r.method, callback);
+                HookStatus.ok();
                 return;
             }
 
@@ -89,8 +91,10 @@ public class HMethod {
             if (all.isEmpty()) {
                 Logger.w("Method not found: " + cls.getName() + "#" + name + MethodResolver.describe(expected)
                         + MethodResolver.candidates(cls, name));
+                HookStatus.failed(HookStatus.shortName(cls.getName()) + "#" + name);
                 return;
             }
+            HookStatus.ok();
             for (Method m : all) XposedBridge.hookMethod(m, callback);
             Logger.w("Parameters changed, hooked all " + all.size() + " overload(s) of "
                     + cls.getName() + "#" + name + ": " + all);
