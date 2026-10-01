@@ -144,7 +144,7 @@ public class ConfigManager {
         stories = new ConfigItem(ConfigItem.HEADER, Keys.StoriesSettings);
         items.add(stories);
 
-        disableStories = new ConfigItem(ConfigItem.SWITCH, Keys.DisableStories, true, ConfigPreferences.getBoolean(Keys.DisableStories), DisableStories::init);
+        disableStories = new ConfigItem(ConfigItem.SWITCH, Keys.DisableStories, true, ConfigPreferences.getBoolean(Keys.DisableStories, true), DisableStories::init);
         items.add(disableStories);
 
         items.add(shadows);

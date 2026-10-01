@@ -10,6 +10,7 @@ import com.my.televip.Class.ClassNames;
 import com.my.televip.Clients.ClientManager;
 import com.my.televip.base.BaseMethodHook;
 import com.my.televip.hooks.HMethod;
+import com.my.televip.settings.nativeui.GhostButton;
 import com.my.televip.settings.nativeui.NativeSettings;
 import com.my.televip.utils.Utils;
 
@@ -46,6 +47,18 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                 // Opened from the TeleVip icon: show the settings window (plain Android views).
                 Activity activity = (Activity) param.thisObject;
                 NativeSettings.showWhenReady(activity, activity.getIntent());
+                GhostButton.attach(activity);
+            }
+        });
+
+        // Telegram recreates its window now and then; make sure the ghost is there whenever it is shown.
+        HMethod.hookMethod(ClassLoad.getClass(ClassNames.LAUNCH_ACTIVITY), "onResume", new BaseMethodHook() {
+            @Override
+            protected void afterMethod(MethodHookParam param) {
+                Class<?> launch = ClassLoad.getClass(ClassNames.LAUNCH_ACTIVITY);
+                if (launch != null && launch.isInstance(param.thisObject)) {
+                    GhostButton.attach((Activity) param.thisObject);
+                }
             }
         });
 
