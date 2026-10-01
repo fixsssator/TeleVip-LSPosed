@@ -53,8 +53,9 @@ public final class GhostButton {
             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(size, size, Gravity.TOP | Gravity.START);
             int screenW = activity.getResources().getDisplayMetrics().widthPixels;
             int screenH = activity.getResources().getDisplayMetrics().heightPixels;
-            lp.leftMargin = screenW - size - dp(activity, 6);
-            lp.topMargin = screenH / 3;
+            android.content.SharedPreferences prefs = activity.getSharedPreferences("televip_ui", 0);
+            lp.leftMargin = Math.min(Math.max(0, prefs.getInt("ghost_x", screenW - size - dp(activity, 6))), Math.max(0, screenW - size));
+            lp.topMargin = Math.min(Math.max(0, prefs.getInt("ghost_y", screenH / 3)), Math.max(0, screenH - size));
 
             ghost.setOnTouchListener(new View.OnTouchListener() {
                 float downX, downY;
@@ -90,7 +91,12 @@ public final class GhostButton {
                             return true;
                         }
                         case MotionEvent.ACTION_UP:
-                            if (!moved && !longFired) NativeSettings.show(activity);
+                            if (moved) {
+                                activity.getSharedPreferences("televip_ui", 0).edit()
+                                        .putInt("ghost_x", p.leftMargin).putInt("ghost_y", p.topMargin).apply();
+                            } else if (!longFired) {
+                                NativeSettings.show(activity);
+                            }
                             return true;
                         default:
                             return true;

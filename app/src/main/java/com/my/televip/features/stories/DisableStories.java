@@ -157,6 +157,21 @@ public class DisableStories {
         }
     }
 
+    private static final java.util.concurrent.atomic.AtomicInteger CLEARED = new java.util.concurrent.atomic.AtomicInteger();
+
+    /**
+     * The list holds TL_stories$TL_peerStories objects (lower-case "p"), a subclass of TL_stories$PeerStories,
+     * so test the whole class chain case-insensitively; the TL classes keep their names in every build.
+     */
+    private static boolean isPeerStories(Object o) {
+        if (o == null) return false;
+        for (Class<?> c = o.getClass(); c != null && c != Object.class; c = c.getSuperclass()) {
+            String n = c.getName().toLowerCase(java.util.Locale.ROOT);
+            if (n.endsWith("peerstories") || n.contains("peerstories_layer")) return true;
+        }
+        return false;
+    }
+
     private static int staticInt(Class<?> cls, String field) {
         try {
             java.lang.reflect.Field f = cls.getDeclaredField(Obfuscate.getFieldName("NotificationCenter", field));
@@ -192,7 +207,11 @@ public class DisableStories {
                 if (list == null || list.isEmpty()) continue;
                 Object first = list.get(0);
                 // only the lists shown in the chat list (dialog and hidden stories), nothing else
-                if (first != null && first.getClass().getName().contains("PeerStories")) list.clear();
+                if (isPeerStories(first)) {
+                    int n = list.size();
+                    list.clear();
+                    if (CLEARED.incrementAndGet() <= 3) Logger.l("Stories row emptied (" + n + " peers)");
+                }
             }
         } catch (Throwable t) {
             Logger.e(t);

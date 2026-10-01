@@ -6,6 +6,10 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.my.televip.application.ApplicationLoaderHook;
 import com.my.televip.obfuscate.struct.ResolverRegistry;
 
@@ -13,8 +17,20 @@ import de.robv.android.xposed.XposedBridge;
 
 public class Logger {
 
+    private static final Map<String, AtomicInteger> SEEN = new ConcurrentHashMap<>();
+
+    /** true for the first 3 occurrences of a message, then only at 10, 100, 1000 ... (stops log floods). */
+    private static boolean shouldLog(String key) {
+        if (SEEN.size() > 2000) SEEN.clear();
+        int n = SEEN.computeIfAbsent(key, k -> new AtomicInteger()).incrementAndGet();
+        if (n <= 3) return true;
+        for (int p = 10; p <= 1000000; p *= 10) if (n == p) return true;
+        return false;
+    }
+
     public static void w(String text)
     {
+        if (!shouldLog("w:" + text)) return;
         XposedBridge.log("[TeleVip] [Warning] pkgName: "+ pkgName + " " + text);
     }
 
@@ -64,6 +80,8 @@ public class Logger {
                 }
             }
 
+            String dedupeKey = "e:" + throwable + (throwable.getStackTrace().length > 0 ? throwable.getStackTrace()[0] : "");
+            if (!shouldLog(dedupeKey)) return;
             log.append(" | Telegram ").append(hostVersion());
             log.append(" | TeleVip ").append(com.my.televip.utils.Utils.MODULE_VERSION);
             log.append(" | Android ").append(Build.VERSION.RELEASE).append("/").append(Build.VERSION.SDK_INT);
