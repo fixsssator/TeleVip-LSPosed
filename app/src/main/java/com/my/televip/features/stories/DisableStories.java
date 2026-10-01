@@ -10,6 +10,7 @@ import com.my.televip.hooks.HookStatus;
 import com.my.televip.hooks.ShapeResolver;
 import com.my.televip.logging.Logger;
 import com.my.televip.utils.Utils;
+import de.robv.android.xposed.XposedHelpers;
 import com.my.televip.obfuscate.ArgsResolver;
 import com.my.televip.obfuscate.Obfuscate;
 
@@ -37,6 +38,8 @@ public class DisableStories {
                         }
                     }));
                 }
+
+                hookStoryLists();
 
                 Class<?> storiesController = findStoriesController();
                 if (storiesController != null) {
@@ -81,7 +84,7 @@ public class DisableStories {
     /**
      * StoriesController.hasStories() decides whether the row of stories is shown above the chat list.
      * By name when it is readable; otherwise the class's "() -> boolean" methods (there are exactly two,
-     * hasStories() and hasSelfStories(), in Telegram 12.10.5 and 12.10.6). More than three would mean the
+     * hasOnlySelfStories() and hasSelfStories(), in Telegram 12.10.5 and 12.10.6; hasStories() itself is inlined by R8). More than three would mean the
      * class changed shape, and then nothing is hooked rather than guessing.
      */
     private static void hookHasStories(Class<?> controller) {
@@ -109,6 +112,90 @@ public class DisableStories {
         for (java.lang.reflect.Method m : chosen) {
             de.robv.android.xposed.XposedBridge.hookMethod(m, hook);
             HookStatus.ok();
+        }
+    }
+
+
+    // ---------------------------------------------------------------------------------------------
+    // The row of stories above the chat list.
+    //
+    // In Telegram's release builds StoriesController.hasStories() no longer exists: R8 copied its body
+    // ("the list of stories is not empty, or I have own stories") straight into the chat list screen, so
+    // a hook on it cannot hide anything. What the screen reads is the list itself, and it re-reads it
+    // whenever Telegram posts the "storiesUpdated" notification. So, with "disable stories" on, we empty
+    // the lists of PeerStories right before that notification goes out. Only readable things are used:
+    // NotificationCenter, MessagesController.getStoriesController() and the TL class name "PeerStories".
+    // ---------------------------------------------------------------------------------------------
+
+    private static final java.util.Map<Class<?>, java.lang.reflect.Field[]> LIST_FIELDS = new java.util.concurrent.ConcurrentHashMap<>();
+
+    private static void hookStoryLists() {
+        try {
+            final Class<?> nc = ClassLoad.getClass(ClassNames.NOTIFICATION_CENTER);
+            final Class<?> mc = ClassLoad.getClass(ClassNames.MESSAGES_CONTROLLER);
+            if (nc == null || mc == null) return;
+
+            final int storiesUpdated = staticInt(nc, "storiesUpdated");
+            final int storiesListUpdated = staticInt(nc, "storiesListUpdated");
+            if (storiesUpdated == Integer.MIN_VALUE && storiesListUpdated == Integer.MIN_VALUE) {
+                HookStatus.failed("NotificationCenter#storiesUpdated");
+                return;
+            }
+
+            HMethod.hookMethod(nc, Obfuscate.getMethodName("NotificationCenter", "postNotificationName"),
+                    int.class, Object[].class, new BaseMethodHook() {
+                        @Override
+                        protected void beforeMethod(MethodHookParam param) {
+                            if (!ConfigManager.disableStories.isEnable()) return;
+                            int id = (Integer) param.args[0];
+                            if (id != storiesUpdated && id != storiesListUpdated) return;
+                            clearStoryLists(param.thisObject, mc);
+                        }
+                    });
+        } catch (Throwable t) {
+            Logger.e(t);
+        }
+    }
+
+    private static int staticInt(Class<?> cls, String field) {
+        try {
+            java.lang.reflect.Field f = cls.getDeclaredField(Obfuscate.getFieldName("NotificationCenter", field));
+            f.setAccessible(true);
+            return f.getInt(null);
+        } catch (Throwable t) {
+            return Integer.MIN_VALUE;
+        }
+    }
+
+    private static void clearStoryLists(Object notificationCenter, Class<?> messagesController) {
+        try {
+            int account = XposedHelpers.getIntField(notificationCenter, Obfuscate.getFieldName("NotificationCenter", "currentAccount"));
+            Object controllerOwner = XposedHelpers.callStaticMethod(messagesController, Obfuscate.getMethodName("MessagesController", "getInstance"), account);
+            if (controllerOwner == null) return;
+            Object stories = XposedHelpers.callMethod(controllerOwner, Obfuscate.getMethodName("MessagesController", "getStoriesController"));
+            if (stories == null) return;
+
+            java.lang.reflect.Field[] fields = LIST_FIELDS.get(stories.getClass());
+            if (fields == null) {
+                java.util.List<java.lang.reflect.Field> l = new java.util.ArrayList<>();
+                for (java.lang.reflect.Field f : stories.getClass().getDeclaredFields()) {
+                    if (java.lang.reflect.Modifier.isStatic(f.getModifiers())) continue;
+                    if (f.getType() != java.util.ArrayList.class) continue;
+                    f.setAccessible(true);
+                    l.add(f);
+                }
+                fields = l.toArray(new java.lang.reflect.Field[0]);
+                LIST_FIELDS.put(stories.getClass(), fields);
+            }
+            for (java.lang.reflect.Field f : fields) {
+                java.util.ArrayList<?> list = (java.util.ArrayList<?>) f.get(stories);
+                if (list == null || list.isEmpty()) continue;
+                Object first = list.get(0);
+                // only the lists shown in the chat list (dialog and hidden stories), nothing else
+                if (first != null && first.getClass().getName().contains("PeerStories")) list.clear();
+            }
+        } catch (Throwable t) {
+            Logger.e(t);
         }
     }
 
