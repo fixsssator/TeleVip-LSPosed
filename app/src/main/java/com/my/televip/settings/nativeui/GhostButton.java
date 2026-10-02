@@ -30,9 +30,35 @@ public final class GhostButton {
 
     private GhostButton() {}
 
+    private static final String PREFS = "televip_ui";
+
+    /** Off by default: the settings open from the TeleVip icon or the Quick Settings tile. */
+    public static boolean isEnabled(Activity activity) {
+        try {
+            return activity.getSharedPreferences(PREFS, 0).getBoolean("ghost_enabled", false);
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+
+    public static void setEnabled(Activity activity, boolean on) {
+        try {
+            activity.getSharedPreferences(PREFS, 0).edit().putBoolean("ghost_enabled", on).apply();
+            if (on) {
+                hiddenThisRun = false;
+                attach(activity);
+            } else {
+                View v = activity.getWindow().getDecorView().findViewWithTag(TAG);
+                if (v != null) ((ViewGroup) v.getParent()).removeView(v);
+            }
+        } catch (Throwable t) {
+            Logger.e(t);
+        }
+    }
+
     public static void attach(final Activity activity) {
         try {
-            if (hiddenThisRun || activity == null || activity.isFinishing()) return;
+            if (hiddenThisRun || activity == null || activity.isFinishing() || !isEnabled(activity)) return;
             final ViewGroup decor = (ViewGroup) activity.getWindow().getDecorView();
             if (decor.findViewWithTag(TAG) != null) return;
 

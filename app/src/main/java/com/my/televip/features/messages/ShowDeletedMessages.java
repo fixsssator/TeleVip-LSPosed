@@ -193,6 +193,7 @@ public class ShowDeletedMessages {
             }));
 
             ShowDeletedMessages.initProcessUpdateArray();
+            DeletedMarker.init();
         } catch (Throwable e) {
             Logger.e(e);
         }

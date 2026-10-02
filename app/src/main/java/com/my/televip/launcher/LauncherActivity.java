@@ -24,7 +24,7 @@ import java.util.Locale;
 public class LauncherActivity extends Activity {
 
     /** Keep in sync with ClientManager.Client (that enum cannot be loaded outside the hooked process). */
-    private static final String[][] CLIENTS = {
+    static final String[][] CLIENTS = {
             {"org.telegram.messenger", "Telegram"},
             {"org.telegram.messenger.beta", "Telegram Beta"},
             {"org.telegram.messenger.web", "Telegram (web)"},
@@ -47,6 +47,19 @@ public class LauncherActivity extends Activity {
             {"org.telegram.group", "Turrit"},
             {"com.tgconnect.android", "TGConnect"},
     };
+
+    /** Launch intent of the first installed supported client, with the "open settings" extra. */
+    static Intent settingsIntent(PackageManager pm) {
+        for (String[] c : CLIENTS) {
+            Intent launch = pm.getLaunchIntentForPackage(c[0]);
+            if (launch != null) {
+                launch.putExtra("televip_open_settings", true);
+                launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                return launch;
+            }
+        }
+        return null;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

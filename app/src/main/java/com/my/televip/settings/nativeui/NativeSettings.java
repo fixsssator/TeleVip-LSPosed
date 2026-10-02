@@ -181,10 +181,40 @@ public final class NativeSettings {
         }
         try {
             list.addView(spacer(a, p));
+            list.addView(ghostRow(a, p));
             list.addView(statusBlock(a, p));
         } catch (Throwable t) {
             Logger.e(t);
         }
+    }
+
+    /** Optional floating ghost over Telegram; a view-only setting, kept outside the feature config. */
+    private static View ghostRow(final Activity a, Palette p) {
+        boolean ru = "ru".equals(Locale.getDefault().getLanguage());
+        LinearLayout row = new LinearLayout(a);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setGravity(Gravity.CENTER_VERTICAL);
+        row.setPadding(dp(a, 16), dp(a, 12), dp(a, 16), dp(a, 12));
+        row.setBackground(ripple(a, p));
+
+        LinearLayout labels = new LinearLayout(a);
+        labels.setOrientation(LinearLayout.VERTICAL);
+        labels.addView(text(a, ru ? "Плавающий призрак в Telegram" : "Floating ghost in Telegram", 16, p.text, false));
+        labels.addView(text(a, ru ? "Без него: иконка TeleVip или плитка в шторке" : "Without it: the TeleVip icon or the Quick Settings tile", 13, p.sub, false));
+        row.addView(labels, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+
+        final Switch sw = new Switch(a);
+        sw.setChecked(GhostButton.isEnabled(a));
+        row.addView(sw);
+        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton b, boolean checked) {
+                GhostButton.setEnabled(a, checked);
+            }
+        });
+        row.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) { sw.toggle(); }
+        });
+        return row;
     }
 
     /** What was hooked in this Telegram build; explains why a switch may do nothing. */
