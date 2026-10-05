@@ -32,6 +32,8 @@ public class MessageTimeModifier {
 
         loaded = true;
 
+        DeletedMarker.init();   // minified builds: ID goes into the message text
+
         try {
             HMethod.hookMethod(
                     ClassLoad.getClass(ClassNames.CHAT_MESSAGE_CELL),

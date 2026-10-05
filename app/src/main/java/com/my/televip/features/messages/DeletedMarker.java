@@ -28,7 +28,7 @@ import de.robv.android.xposed.XposedHelpers;
  * builds that class and its fields are renamed, so this adds " 🗑 Deleted" in red to the end of the message
  * text (or caption) instead. MessageObject keeps its readable names in every build.
  *
- * Only active when ChatMessageCell cannot be found by name; otherwise the old marker is used and this would
+ * The same two hooks draw the message ID ("Show message ID"). Only active when ChatMessageCell cannot be found by name; otherwise the old marker is used and this would
  * show it twice. Messages without any text or caption (a bare photo, a sticker) get no marker.
  */
 public final class DeletedMarker {
@@ -68,16 +68,43 @@ public final class DeletedMarker {
 
     private static void markField(Object messageObject, String field) {
         try {
-            if (ConfigManager.showDeletedMessages == null || !ConfigManager.showDeletedMessages.isEnable()) return;
-            if (!isDeleted(messageObject)) return;
+            boolean wantDeleted = ConfigManager.showDeletedMessages != null && ConfigManager.showDeletedMessages.isEnable();
+            boolean wantId = ConfigManager.showMessageId != null && ConfigManager.showMessageId.isEnable();
+            if (!wantDeleted && !wantId) return;
+
             String name = Obfuscate.getFieldName("MessageObject", field);
             Object current = XposedHelpers.getObjectField(messageObject, name);
             if (!(current instanceof CharSequence)) return;
-            CharSequence marked = mark((CharSequence) current, suffix());
-            if (marked != current) XposedHelpers.setObjectField(messageObject, name, marked);
+            CharSequence text = (CharSequence) current;
+
+            // ID first, "deleted" last, so the red marker is always the very end of the message
+            if (wantId) {
+                int id = messageId(messageObject);
+                if (id > 0) text = decorate(text, " \u00B7 ID " + id, 0xFF8A8A8A, true);
+            }
+            if (wantDeleted && isDeleted(messageObject)) {
+                text = decorate(text, suffix(), Color.rgb(0xFF, 0x3B, 0x30), false);
+            }
+            if (text != current) XposedHelpers.setObjectField(messageObject, name, text);
         } catch (Throwable t) {
             Logger.e(t);
         }
+    }
+
+    private static int messageId(Object messageObject) {
+        Object owner = XposedHelpers.getObjectField(messageObject, Obfuscate.getFieldName("MessageObject", "messageOwner"));
+        return owner == null ? 0 : new TLRPC.Message(owner).getId();
+    }
+
+    /** Adds the suffix once; an existing one (anywhere for the ID, at the end for "deleted") is left alone. */
+    static CharSequence decorate(CharSequence text, String suffix, int color, boolean anywhere) {
+        if (text == null || text.length() == 0) return text;
+        if (anywhere ? text.toString().contains(suffix) : endsWith(text, suffix)) return text;
+        SpannableStringBuilder b = new SpannableStringBuilder(text);   // keeps emoji / entity spans
+        int start = b.length();
+        b.append(suffix);
+        b.setSpan(new ForegroundColorSpan(color), start, b.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return b;
     }
 
     private static boolean isDeleted(Object messageObject) {
@@ -93,13 +120,7 @@ public final class DeletedMarker {
 
     /** Same object when there is nothing to add or the marker is already there. */
     static CharSequence mark(CharSequence text, String suffix) {
-        if (text == null || text.length() == 0) return text;
-        if (endsWith(text, suffix)) return text;
-        SpannableStringBuilder b = new SpannableStringBuilder(text);   // keeps emoji / entity spans
-        int start = b.length();
-        b.append(suffix);
-        b.setSpan(new ForegroundColorSpan(Color.rgb(0xFF, 0x3B, 0x30)), start, b.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return b;
+        return decorate(text, suffix, Color.rgb(0xFF, 0x3B, 0x30), false);
     }
 
     static boolean endsWith(CharSequence text, String suffix) {

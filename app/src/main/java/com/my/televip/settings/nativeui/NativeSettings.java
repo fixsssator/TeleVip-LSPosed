@@ -135,6 +135,12 @@ public final class NativeSettings {
 
     private static void fill(final Activity a, final Dialog dialog, LinearLayout list, Palette p) {
         List<ConfigItem> items = ConfigManager.getItems();
+        try {
+            list.addView(ghostRow(a, p));
+            list.addView(spacer(a, p));
+        } catch (Throwable t) {
+            Logger.e(t);
+        }
         boolean lastWasSpacer = true;
         for (final ConfigItem item : items) {
             if (item == null) continue;
@@ -181,7 +187,6 @@ public final class NativeSettings {
         }
         try {
             list.addView(spacer(a, p));
-            list.addView(ghostRow(a, p));
             list.addView(statusBlock(a, p));
         } catch (Throwable t) {
             Logger.e(t);
@@ -247,9 +252,11 @@ public final class NativeSettings {
         LinearLayout labels = new LinearLayout(a);
         labels.setOrientation(LinearLayout.VERTICAL);
         labels.addView(text(a, Translator.get(item.getKey()), 16, p.text, false));
-        String sub = item.getValue() != null ? item.getValue()
+        final String problem = FeatureSupport.problem(item.getKey());
+        String sub = problem != null ? problem
+                : item.getValue() != null ? item.getValue()
                 : item.isRestartRequired() ? Translator.get(Keys.RestartRequired) : null;
-        if (sub != null) labels.addView(text(a, sub, 13, p.sub, false));
+        if (sub != null) labels.addView(text(a, sub, 13, problem != null ? 0xFFE53935 : p.sub, false));
         row.addView(labels, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 
         final Switch sw = new Switch(a);
@@ -261,6 +268,11 @@ public final class NativeSettings {
                 apply(a, item, parent, checked);
             }
         });
+        if (problem != null) {
+            sw.setEnabled(false);
+            row.setAlpha(0.6f);
+            return row;
+        }
         row.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) { sw.toggle(); }
         });
